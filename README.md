@@ -4,16 +4,17 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![API](https://img.shields.io/badge/API-30%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=30)
 
-Um tile de configurações rápidas (Quick Settings) para Android que permite trocar facilmente entre dispositivos de saída de áudio.
+Tiles de configurações rápidas (Quick Settings) para Android para controle de áudio: troca de dispositivo de saída e acesso ao painel de volume.
 
 ## 📱 Sobre
 
-Este aplicativo adiciona um tile personalizado às Configurações Rápidas do Android, permitindo acessar rapidamente o diálogo nativo de seleção de saída de áudio do sistema. Ideal para alternar entre fones de ouvido, alto-falantes, dispositivos Bluetooth e outros dispositivos de áudio conectados.
+Este aplicativo adiciona dois tiles personalizados às Configurações Rápidas do Android. O tile **Audio Output** abre o seletor nativo de dispositivo de saída de áudio; o tile **Volume Panel** abre o painel de volume do sistema. Cada tile pode ser adicionado de forma independente — use um, os dois, ou nenhum.
 
 ## ✨ Funcionalidades
 
-- 🎧 Acesso rápido ao seletor de saída de áudio
-- 🔊 Pressione longamente o tile para abrir o painel de volume do sistema
+- 🎧 **Tile "Audio Output"**: acesso rápido ao seletor de dispositivo de saída de áudio
+- 🔊 **Tile "Volume Panel"**: acesso direto ao painel de volume do sistema (mídia, notificações, alarme)
+- 📌 Funciona como widget na home screen (ex: Nothing Phone) — ambos os tiles respondem ao toque simples
 - 🔄 Integração com o sistema nativo do Android
 - 🌐 Suporte a português brasileiro e inglês
 - 📱 Compatível com Android 11+ (API 30+), compilado com API 36
@@ -53,26 +54,31 @@ cd AudioOutputSwitcher
 1. Instale o APK no seu dispositivo Android
 2. Abra as Configurações Rápidas (deslize duas vezes para baixo na barra de status)
 3. Toque no ícone de editar (lápis)
-4. Encontre "Audio Output" na lista de tiles disponíveis
-5. Arraste para a área de tiles ativos
+4. Encontre "Audio Output" e/ou "Volume Panel" na lista de tiles disponíveis
+5. Arraste o(s) tile(s) para a área de tiles ativos
 
 ## 🎯 Como usar
 
+**Tile "Audio Output"**
 1. Deslize para baixo para abrir as Configurações Rápidas
-2. Toque no tile "Audio Output" para abrir o seletor de saída de áudio
-3. Selecione o dispositivo de áudio desejado no diálogo que abrir
+2. Toque no tile para abrir o seletor de dispositivo de saída de áudio
+3. Selecione o dispositivo desejado no diálogo que abrir
 
-**Pressione longamente** o tile para abrir o painel de volume do sistema e ajustar volumes de mídia, notificações e alarmes.
+**Tile "Volume Panel"**
+1. Deslize para baixo para abrir as Configurações Rápidas
+2. Toque no tile para abrir o painel de volume do sistema
+3. Ajuste volumes de mídia, notificações, alarme e outros
 
 ## 🏗️ Arquitetura
 
 O aplicativo é composto por:
 
-- **AudioOutputTileService**: Serviço principal que implementa o tile das configurações rápidas
-- **VolumePanelActivity**: Activity transparente acionada pelo long press do tile, abre o painel de volume do sistema
-- **Sistema de integração**: Comunica-se com o SystemUI do Android para abrir o diálogo nativo via broadcast
-- **Fallback em cascata**: Caso o broadcast seja bloqueado pela ROM, o app tenta abrir o Painel de Volume e, em seguida, as Configurações de Som
-- **Recursos localizados**: Suporte a múltiplos idiomas
+- **AudioOutputTileService**: Tile de troca de dispositivo de saída de áudio; comunica-se com o SystemUI via broadcast para abrir o diálogo nativo
+- **VolumePanelTileService**: Tile de painel de volume; abre o painel de volume do sistema no toque simples
+- **VolumePanelActivity**: Activity transparente acionada pelo long press do tile "Audio Output", abre o painel de volume
+- **TileServiceExt**: Extension function compartilhada que encapsula `startActivityAndCollapse` com suporte a Android 14+
+- **AudioOutputFallback**: Fallback em cascata — se o broadcast for bloqueado pela ROM, tenta Painel de Volume e depois Configurações de Som
+- **Recursos localizados**: Suporte a inglês e português (Brasil)
 
 ## 📦 Releases Automáticos
 
@@ -112,12 +118,16 @@ git push origin v1.0.1
 ```
 app/src/main/
 ├── java/br/com/wasystems/audiooutputswitcher/
-│   ├── AudioOutputTileService.kt    # Serviço principal do tile
-│   └── VolumePanelActivity.kt       # Activity de long press (painel de volume)
+│   ├── AudioOutputTileService.kt    # Tile de troca de dispositivo de saída
+│   ├── VolumePanelTileService.kt    # Tile de painel de volume
+│   ├── VolumePanelActivity.kt       # Activity de long press (painel de volume)
+│   ├── AudioOutputFallback.kt       # Fallback em cascata
+│   └── TileServiceExt.kt            # Extension: startActivityAndCollapse
 ├── res/
 │   ├── values/strings.xml           # Strings em inglês
 │   ├── values-pt-rBR/strings.xml    # Strings em português
-│   └── drawable/ic_audio_output.xml # Ícone do tile
+│   ├── drawable/ic_audio_output.xml # Ícone do tile Audio Output
+│   └── drawable/ic_volume_panel.xml # Ícone do tile Volume Panel
 └── AndroidManifest.xml
 ```
 

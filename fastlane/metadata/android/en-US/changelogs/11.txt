@@ -1,0 +1,2 @@
+• New "Volume Panel" quick settings tile for direct access to volume controls
+• Both tiles can be used independently or together

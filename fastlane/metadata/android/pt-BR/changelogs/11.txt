@@ -1,0 +1,2 @@
+• Novo tile "Painel de volume" para acesso direto aos controles de volume
+• Os dois tiles podem ser usados de forma independente ou juntos

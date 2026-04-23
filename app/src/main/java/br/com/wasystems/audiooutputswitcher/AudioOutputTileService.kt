@@ -1,8 +1,5 @@
 package br.com.wasystems.audiooutputswitcher
 
-import android.annotation.SuppressLint
-import android.app.PendingIntent
-import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -85,33 +82,10 @@ class AudioOutputTileService : TileService() {
      * Nível 2: Sound Settings
      */
     @VisibleForTesting internal fun openFallback() {
-        val opened = AudioOutputFallback.tryEach { intent -> tryOpen(intent) }
+        val opened = AudioOutputFallback.tryEach { intent -> tryStartActivity(intent, TAG) }
         if (!opened) {
             Log.e(TAG, "all fallbacks failed")
             showToast(getString(R.string.error_opening_dialog))
-        }
-    }
-
-    @SuppressLint("StartActivityAndCollapseDeprecated")
-    private fun tryOpen(intent: Intent): Boolean {
-        val action = intent.action ?: "Unknown"
-        return try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-                startActivityAndCollapse(
-                    PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
-                )
-            } else {
-                @Suppress("DEPRECATION")
-                startActivityAndCollapse(intent)
-            }
-            Log.d(TAG, "opened $action as fallback")
-            true
-        } catch (e: ActivityNotFoundException) {
-            Log.w(TAG, "$action activity not found: ${e.message}")
-            false
-        } catch (e: Exception) {
-            Log.w(TAG, "$action fallback failed: ${e.message}")
-            false
         }
     }
 

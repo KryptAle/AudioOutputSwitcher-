@@ -3,4 +3,7 @@
     <string name="audio_output">Saída de áudio</string>
     <string name="error_opening_dialog">Não foi possível abrir o seletor de saída de áudio</string>
     <string name="tile_subtitle">Toque para alternar</string>
+    <string name="volume_panel">Painel de volume</string>
+    <string name="volume_panel_subtitle">Toque para ajustar</string>
+    <string name="error_opening_volume_panel">Não foi possível abrir o painel de volume</string>
 </resources>

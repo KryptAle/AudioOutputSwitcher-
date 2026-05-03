@@ -1,36 +1,25 @@
-package br.com.wasystems.audiooutputswitcher
+package com.weslley.audiooutputswitcher // Ajusta según el paquete real
 
-import android.app.Activity
-import android.content.ActivityNotFoundException
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
+import android.provider.Settings
+import androidx.appcompat.app.AppCompatActivity
 
-class VolumePanelActivity : Activity() {
-
-    companion object {
-        private const val TAG = "VolumePanelActivity"
-    }
-
+class VolumePanelActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        openVolumePanel()
-        finish()
-    }
 
-    private fun openVolumePanel() {
-        val opened = AudioOutputFallback.tryEach { intent ->
-            try {
-                startActivity(intent)
-                Log.d(TAG, "opened: ${intent.action}")
-                true
-            } catch (e: ActivityNotFoundException) {
-                Log.w(TAG, "activity not found: ${intent.action}: ${e.message}")
-                false
-            } catch (e: Exception) {
-                Log.w(TAG, "failed to open ${intent.action}: ${e.message}")
-                false
-            }
+        try {
+            // Esta es la intención que usa el TileService para invocar el panel
+            val intent = Intent(Settings.ACTION_VOLUME_CONTROLS_SETTING)
+            startActivity(intent)
+        } catch (e: Exception) {
+            // Manejo de errores en caso de que el sistema no responda
+            e.printStackTrace()
         }
-        if (!opened) Log.e(TAG, "all fallbacks failed")
+
+        // Cerramos la actividad inmediatamente para que el usuario no vea 
+        // una pantalla en blanco detrás del panel de volumen
+        finish()
     }
 }

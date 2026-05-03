@@ -49,8 +49,8 @@
         <activity
             android:name=".SwitcherShortcutActivity"
             android:exported="true"
-            android:label="Abrir Selector Audio"
             android:excludeFromRecents="true"
+            android:label="Selector de Audio"
             android:theme="@android:style/Theme.Translucent.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

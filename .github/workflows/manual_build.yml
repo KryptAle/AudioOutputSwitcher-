@@ -1,12 +1,13 @@
 name: Generar Mi APK Personalizado
 on:
-  workflow_dispatch: # Esto activa el botón manual que te faltaba
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      
       - name: set up JDK 17
         uses: actions/setup-java@v4
         with:
@@ -14,12 +15,13 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-      - name: Build with Gradle
-        run: ./gradlew assembleDebug
+      - name: Dar permisos a Gradle
+        run: chmod +x gradlew  # ESTO ES VITAL
 
-      - name: Upload APK
+      - name: Compilar APK
+        run: ./gradlew assembleDebug --stacktrace # Nos dará más info si falla
+
+      - name: Subir APK
         uses: actions/upload-artifact@v4
         with:
           name: app-debug

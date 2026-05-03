@@ -1,25 +1,26 @@
-package com.weslley.audiooutputswitcher // Ajusta según el paquete real
+package br.com.wasystems.audiooutputswitcher
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
-import androidx.appcompat.app.AppCompatActivity
 
-class VolumePanelActivity : AppCompatActivity() {
+class VolumePanelActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        
         try {
-            // Esta es la intención que usa el TileService para invocar el panel
+            // Intenta abrir el panel de controles de volumen
             val intent = Intent(Settings.ACTION_VOLUME_CONTROLS_SETTING)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
         } catch (e: Exception) {
-            // Manejo de errores en caso de que el sistema no responda
-            e.printStackTrace()
+            // Fallback: Si falla, abre los ajustes de sonido generales
+            val fallbackIntent = Intent(Settings.ACTION_SOUND_SETTINGS)
+            fallbackIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(fallbackIntent)
         }
-
-        // Cerramos la actividad inmediatamente para que el usuario no vea 
-        // una pantalla en blanco detrás del panel de volumen
-        finish()
+        
+        finish() // Cierra la actividad inmediatamente para que sea invisible
     }
 }

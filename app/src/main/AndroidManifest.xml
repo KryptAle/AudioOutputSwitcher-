@@ -50,9 +50,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="br.com.wasystems.audiooutputswitcher.SwitcherShortcutActivity"
+            android:name=".SwitcherShortcutActivity"
             android:exported="true"
-            android:label="Selector de Audio"
+            android:excludeFromRecents="true"
             android:theme="@android:style/Theme.Translucent.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

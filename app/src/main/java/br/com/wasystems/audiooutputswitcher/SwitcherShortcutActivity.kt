@@ -11,7 +11,7 @@ class SwitcherShortcutActivity : AppCompatActivity() {
         // Abre el selector nativo usando la lógica de respaldo del proyecto
         AudioOutputFallback.openSelector(this)
 
-        // Cierra la actividad inmediatamente para que sea invisible al usuario
+        // Cierra la actividad inmediatamente para que sea invisible al usuario 
         finish()
     }
 }
